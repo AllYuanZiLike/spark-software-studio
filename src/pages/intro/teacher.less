@@ -1,0 +1,43 @@
+.card-box {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  border: 5px dashed #e3f5e1;
+  box-shadow: 1vh 1vh rgba(63, 75, 59, 0.24);
+  border-radius: 1vh;
+  .card-top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 8vh;
+    font-size: 1.8em;
+    border-bottom: 2px solid #e3f5e1;
+  }
+  .card-intro {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .first {
+      padding: 2vh;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      .left {
+        width: 15vw;
+        padding: 1vh;
+        color: #b0a789;
+        font-weight: 600;
+        font-size: 1.2em;
+      }
+      .right {
+        width: 60vw;
+        padding: 1vh;
+        font-size: 1.2em;
+        text-align: left;
+      }
+    }
+  }
+}
+@import "teacherMedia.less";

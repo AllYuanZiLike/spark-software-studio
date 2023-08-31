@@ -1,0 +1,67 @@
+
+
+.nav {
+    width: 80%;
+    height: 10vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 10vh;
+    .left {
+        width: 20%;
+        height: 100%;
+        img {
+            height: 100%;
+        }
+    }
+    .menu {
+        display: none;
+        width: 30%;
+    }
+    .center {
+        width: 60%;
+        height: 100%;
+        ul {
+            height: 100%;
+            width: 100%;
+            margin-block-start: 0;
+            margin-block-end: 0;
+            display: flex;
+            flex-direction:row;
+            justify-content: space-around;
+            align-items: center;
+            li {
+                display: inline-block;
+                list-style: none;
+                background-color: #f0f7ef;
+                padding: 1% 5%;
+                border-radius: 2vh;
+                color: #098538;
+                cursor: pointer;
+            }
+            li:focus {
+                background-color: #92c78a;
+                color: #fff;
+                //border: 1px solid #5b7a57;
+            }
+            .intro {
+
+            }
+            .enrollment {
+                background-color: transparent;
+                border: 2px solid #384850;
+                color: #384850;
+            }
+        }
+    }
+    .right {
+        width: 20%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .login {
+            border-radius: 1.5vh;
+        }
+    }
+}
+@import 'navBarMedia.less';

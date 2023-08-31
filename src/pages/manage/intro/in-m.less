@@ -1,0 +1,44 @@
+.in-m-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .in-m-box-top {
+    height: 30%;
+    .intro-text {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      .ant-card {
+        .ant-card-head {
+          height: 5vh;
+        }
+        .ant-card-body {
+          padding: 0 2%;
+          .text {
+            height: 10vh;
+            overflow-y: scroll;
+            margin-bottom: 1vh;
+          }
+        }
+      }
+    }
+  }
+  .in-m-box-bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 70%;
+    overflow-y: scroll;
+    .teachers {
+      width: 70%;
+      padding: 2%;
+    }
+    .charge {
+      width: 30%;
+      padding: 2%;
+
+    }
+  }
+}

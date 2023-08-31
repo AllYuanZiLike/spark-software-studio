@@ -1,0 +1,5 @@
+@media screen and (max-width: 391px){
+  .App {
+    width: 123vw;
+  }
+}

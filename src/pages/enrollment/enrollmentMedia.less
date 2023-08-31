@@ -1,0 +1,46 @@
+@media screen and (max-width: 430px){
+  .enrollment-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 3vh 0;
+    .ant-tabs {
+      display: none;
+    }
+    .enroll-media {
+      width: 100%;
+      border: 3px dashed #64ad80;
+      display: block;
+      display: flex;
+      flex-direction: row;
+      padding: 2vh;
+      .enroll-media-left {
+        display: flex;
+        flex-direction: column;
+        width: 40%;
+        font-weight: 600;
+        .enroll-item {
+          min-height: 12vh;
+        }
+      }
+      .enroll-media-right {
+        display: flex;
+        flex-direction: column;
+        width: 55%;
+        .enroll-item {
+          min-height: 12vh;
+        }
+      }
+    }
+    .process {
+      flex-direction: column;
+      .process-l {
+        width: 100%;
+      }
+      .process-r {
+        width: 100%;
+      }
+    }
+  }
+}

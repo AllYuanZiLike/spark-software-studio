@@ -1,0 +1,44 @@
+.study-box {
+  width: 80%;
+  .tabs {
+    width: 100%;
+    height: 10vh;
+    background-color: #f0f7ef;
+    border-radius: 2vh;
+    display: flex;
+    justify-content: center;
+    ul {
+      height: 100%;
+      width: 100%;
+      margin-block-start: 0;
+      margin-block-end: 0;
+      padding-inline-start:0;
+      display: flex;
+      flex-direction:row;
+      justify-content: space-around;
+      align-items: center;
+      li {
+        display: inline-block;
+        list-style: none;
+        border-right: 1px solid #dadada;
+        padding: 1% 5%;
+        text-align: center;
+        color: #000;
+        cursor: pointer;
+      }
+      li:last-child {
+        border-right: 0;
+      }
+      li:focus {
+        //background-color: #92c78a;
+        font-weight: 800;
+        //border: 1px solid #5b7a57;
+      }
+    }
+  }
+  .content {
+    min-height: 55vh;
+  }
+}
+
+@import "studyMedia.less";

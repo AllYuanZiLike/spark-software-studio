@@ -1,0 +1,83 @@
+.box{
+  width: 80%;
+  height: 52vh;
+  border: 10px solid #ade8c5;
+  //margin-right: 0;
+  margin-bottom: 10vh;
+}
+
+.box{
+  overflow: hidden;
+  //background:url("../../assets/daily/study/t5.png") no-repeat center center;
+  //background-size: 100% auto;
+  background-color: rgba(234, 250, 231, 0.51);
+  div {
+    //width: 16.6%;
+    height: 100%;
+    opacity: .8;
+    float: left;
+    transition: all .7s ease 0s;
+    h1{
+      color: #64ad80;
+      font-size: 1.5em;
+      padding: 40px 40px 0;
+    }
+  }
+  .pic1 {
+    width: 20%;
+    background:url("../../assets/daily/study/t1.png") no-repeat center center;
+  }
+  .pic2 {
+    width: 20%;
+    background:url("../../assets/daily/study/t2.png") no-repeat center center;
+  }
+  .pic3 {
+    width: 20%;
+    background:url("../../assets/daily/study/t3.png") no-repeat center center;
+  }
+  .pic4 {
+    width: 20%;
+    background:url("../../assets/daily/study/t4.png") no-repeat center center;
+  }
+  .pic5 {
+    width: 20%;
+    background:url("../../assets/daily/study/t5.png") no-repeat center center;
+  }
+  .pic1:hover{
+    opacity: 1;
+    width: 40%;
+    animation: picBig 100 linear;
+  }
+  .pic2:hover{
+    opacity: 1;
+    width: 40%;
+    animation: picBig 100 linear;
+  }
+  .pic3:hover{
+    opacity: 1;
+    width: 40%;
+    animation: picBig 100 linear;
+  }
+  .pic4:hover{
+    opacity: 1;
+    width: 40%;
+    animation: picBig 100 linear;
+  }
+}
+@keyframes picBig {
+  0% {
+    width: 20%;
+  }
+  100% {
+    width: 40%;
+  }
+}
+//@keyframes picSmall {
+//  0% {
+//    width: 40%;
+//  }
+//  100% {
+//    width: 20%;
+//  }
+//}
+@import "dailyMedia.less";
