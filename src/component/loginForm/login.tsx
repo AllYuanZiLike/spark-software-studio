@@ -1,11 +1,12 @@
 import React, {forwardRef, useImperativeHandle,useState } from 'react';
-import {Button,Checkbox, Form, Input,Modal} from 'antd'
+import {Button,Checkbox,message, Form, Input,Modal} from 'antd'
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import './login.less'
 import baseService from '../../axios/request'
 
 
 const Login = forwardRef((props:any,ref)=>{
+    const [messageApi,contextHolder] = message.useMessage();
     useImperativeHandle(ref,
         () => ({showModal})
     );
@@ -22,26 +23,50 @@ const Login = forwardRef((props:any,ref)=>{
     const switchBox = ()=>{
         setIsLogin(!isLogin)
     };
+    const [loginSubmit,setLoginSubmit] = useState({})
     const onLoginFinish = (values: any) => {
         console.log(values);
-        baseService.get({url:'/login',values}).then(res => {
-            console.log(res)
-            setOpen(false);
-        })
+        setLoginSubmit(values)
+
     };
     const [loginForm] = Form.useForm()
     const login = ()=>{
-        console.log()
-        // baseService.get({url:'/login',loginForm}).then(res => {
-            // console.log(res)
-        // })
+        console.log(loginSubmit)
+        baseService.get({url:'/user/login',loginSubmit}).then(res => {
+            console.log(res)
+            if(res.status!==200) return false
+            messageApi.open({
+                type: 'success',
+                content: '登录成功',
+            })
+            setOpen(false)
+        })
+    }
+    const [registerSubmit,setRegisterSubmit] = useState({})
+    const onRegisterFinish = (values: any) => {
+        console.log(values);
+        setRegisterSubmit(values)
+    };
+    const [registerForm] = Form.useForm()
+    const register = ()=>{
+        console.log(registerSubmit)
+        baseService.post({url:'/user/register',registerSubmit}).then(res => {
+            console.log(res)
+            if(res.status!==200) return false
+            messageApi.open({
+                type: 'success',
+                content: '注册成功，请登录'
+            })
+            switchBox()
+        })
     }
     return(
         <div className='modal-box'>
+            {contextHolder}
             <Modal className="modal-box1" width="60vw" title="" open={open} onOk={hideModal} onCancel={hideModal} footer={null} centered>
                 <div className="login-box" style={{width: "50vw",display: "flex",justifyContent: "center",alignItems: "center",flexDirection: "column"}}>
                     <div className="top">{isLogin?'登录':'注册'}</div>
-                    <Form name="normal_login" form={loginForm} hidden={!isLogin} className="login-form" initialValues={{ remember: true }} onFinish={onLoginFinish}>
+                    <Form name="normal_login" form={loginForm} hidden={!isLogin} className="login-form" initialValues={{ remember: false }} onFinish={onLoginFinish}>
                         <Form.Item name="username"
                                    rules={[{ required: true, message: '请输入你的用户名!' }]}
                         >
@@ -72,7 +97,7 @@ const Login = forwardRef((props:any,ref)=>{
                         </Form.Item>
                     </Form>
                     {/*注册表单*/}
-                    <Form name="normal_login" hidden={isLogin} className="login-form" initialValues={{ remember: true }} onFinish={onLoginFinish}>
+                    <Form name="normal_register" form={registerForm} hidden={isLogin} className="register-form" onFinish={onRegisterFinish}>
                         <Form.Item name="username" label="用户名"
                                    rules={[{ required: true, message: '请输入你的用户名!' }]}
                         >
@@ -111,7 +136,7 @@ const Login = forwardRef((props:any,ref)=>{
                         </Form.Item>
 
                         <Form.Item>
-                            <Button type="primary" htmlType="submit" className="login-form-button" onClick={login}>
+                            <Button type="primary" htmlType="submit" className="register-form-button" onClick={register}>
                                 {isLogin?'登录':'注册'}
                             </Button>
                             Or <a onClick={switchBox}>{isLogin?'立即注册':'去登录'}!</a>

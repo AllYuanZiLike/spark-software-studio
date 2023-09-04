@@ -1,8 +1,11 @@
 import './intro.less'
 import Teachers from "./collapse";
+import {useCallback, useState} from "react";
+import baseService from '../../axios/request'
 const {withRouter} = require('react-router-dom')
 
 function Intro(){
+    const [introText,setIntroText] = useState('')
     const person = [
         {
             imgSrc:require('../../assets/intro/charge/zcs.png'),
@@ -16,6 +19,12 @@ function Intro(){
             name:'总负责人：张宸菘'
         },
     ]
+    const getIntroText = useCallback(()=>{
+        baseService.get({url:'/introduction/getIntro'}).then(res=>{
+            console.log(res)
+        })
+    },[])
+    getIntroText()
     return(
         <div className="main">
             <div className="top">
