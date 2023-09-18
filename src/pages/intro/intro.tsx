@@ -1,30 +1,48 @@
 import './intro.less'
 import Teachers from "./collapse";
-import {useCallback, useState} from "react";
-import baseService from '../../axios/request'
+import {useCallback, useEffect, useState} from "react";
+
+import baseService from '../../axios/config'
 const {withRouter} = require('react-router-dom')
 
 function Intro(){
     const [introText,setIntroText] = useState('')
-    const person = [
+    const [introPhoto,setIntroPhoto] = useState(require('../../assets/intro/logo.png'))
+    const [charge,setCharge] = useState([
         {
-            imgSrc:require('../../assets/intro/charge/zcs.png'),
+            id:'1',
+            photo:require('../../assets/intro/charge/zcs.png'),
             name:'总负责人：张宸菘'},
         {
-            imgSrc:require('../../assets/intro/charge/dmj.png'),
+            id:'2',
+            photo:require('../../assets/intro/charge/dmj.png'),
             name:'总负责人：张宸菘'
         },
         {
-            imgSrc:require('../../assets/intro/charge/zcs.png'),
+            id:'3',
+            photo:require('../../assets/intro/charge/zcs.png'),
             name:'总负责人：张宸菘'
         },
-    ]
-    const getIntroText = useCallback(()=>{
-        baseService.get({url:'/introduction/getIntro'}).then(res=>{
+    ])
+    const getIntroText = ()=>{
+        baseService.get('/introduction/getIntro').then(res=>{
             console.log(res)
+            if(res.status!==200) return false
+            setIntroText(res.data.data.content)
+            setIntroPhoto(res.data.data.photo)
         })
+    }
+    const getCharge = ()=>{
+        baseService.get('/leader/getLeader').then(res=>{
+            console.log(res)
+            if(res.status!==200) return false
+            setCharge(res.data.data)
+        })
+    }
+    useEffect(()=>{
+        getIntroText()
+        getCharge()
     },[])
-    getIntroText()
     return(
         <div className="main">
             <div className="top">
@@ -35,21 +53,19 @@ function Intro(){
                     <div className="top-box">
                         <div className="left">简介</div>
                         <div className="right">
-                            <img src={require('../../assets/intro/logo.png')} alt=""/>
+                            <img src={introPhoto} alt=""/>
                             SPARK
                         </div>
                     </div>
-                    <div className="word">
-                        星火软件工作室始于2007年，工作室以创新为导向、以实践为手段、以真实项目为抓手、以培养学生成才为目的，在真实的项目实践中培养学生的创新实践能力。目前，已与多家企业建立了良好的合作关系。星火软件工作室成立十多年来，一直深受学校、学院领导老师的深切关怀和指导，形成了以校外实践导师、校内指导老师和小组学长学姐帮带为核心的计算机学科群实践培养模式。多年来培养了多位行业人才。
-                    </div>
+                    <div className="word">{introText}</div>
                 </div>
             </div>
             <Teachers></Teachers>
             <div className="charge">
-                {person.map((item,index) => (
+                {charge.map((item,index) => (
                     <div className="person" key={index}>
                         <div className="img">
-                            <img src={item.imgSrc} alt=""/>
+                            <img src={item.photo} alt=""/>
                         </div>
                         <div className="name">{item.name}</div>
                     </div>

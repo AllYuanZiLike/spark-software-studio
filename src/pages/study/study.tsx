@@ -39,7 +39,6 @@ function Study(){
 
             </div>
             <div className="content">
-                {/*<BrowserRouter>*/}
                     <Switch>
                         <Redirect from='/study' to='/study/web' exact></Redirect>
                         {/*<Route path="/study" exact component={Study}></Route>*/}
@@ -49,7 +48,6 @@ function Study(){
                         <Route path="/study/python" component={Python}></Route>
                         <Route path="/study/ui" component={Ui}></Route>
                     </Switch>
-                {/*</BrowserRouter>*/}
             </div>
         </div>
     )

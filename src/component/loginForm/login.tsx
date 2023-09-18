@@ -1,18 +1,34 @@
-import React, {forwardRef, useImperativeHandle,useState } from 'react';
-import {Button,Checkbox,message, Form, Input,Modal} from 'antd'
+import React, {forwardRef, useEffect, useImperativeHandle, useState} from 'react';
+import {Select,Button,Checkbox,message, Form, Input,Modal} from 'antd'
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import './login.less'
-import baseService from '../../axios/request'
-
+import baseService from '../../axios/config'
+import store from "../../redux/store";
+const {useHistory} = require('react-router-dom')
 
 const Login = forwardRef((props:any,ref)=>{
     const [messageApi,contextHolder] = message.useMessage();
     useImperativeHandle(ref,
         () => ({showModal})
     );
-
+    const collegeData = ['计算机科学与技术学院','软件学院','信息工程学院'];
+    const professData = {
+        计算机科学与技术学院:['计算机科学与技术','数据科学与大数据技术','物联网工程'],
+        软件学院:['数据科学与大数据技术'],
+        信息工程学院:['信息工程','通信工程','教育技术学']
+    }
+    type professName = keyof typeof professData;
+    const [college,setCollege] = useState(professData[collegeData[0] as professName]);
+    const [profession,setProfess] = useState(professData[collegeData[0] as professName][0]);
+    const handleCollegeChange = (value: professName) => {
+        setCollege(professData[value]);
+        setProfess(professData[value][0]);
+    };
+    const onProfessChange = (value: professName) => {
+        setProfess(value);
+    };
     const [open, setOpen] = useState(false);
-    const [isLogin,setIsLogin] = useState(true);
+    const [isLoginBtn,setIsLoginBtn] = useState(true);
 
     const showModal = () => {
         setOpen(true);
@@ -21,36 +37,46 @@ const Login = forwardRef((props:any,ref)=>{
         setOpen(false);
     };
     const switchBox = ()=>{
-        setIsLogin(!isLogin)
+        setIsLoginBtn(!isLoginBtn)
     };
     const [loginSubmit,setLoginSubmit] = useState({})
     const onLoginFinish = (values: any) => {
         console.log(values);
         setLoginSubmit(values)
+        login(values)
 
     };
     const [loginForm] = Form.useForm()
-    const login = ()=>{
+    const login = (values: any)=>{
         console.log(loginSubmit)
-        baseService.get({url:'/user/login',loginSubmit}).then(res => {
-            console.log(res)
-            if(res.status!==200) return false
-            messageApi.open({
-                type: 'success',
-                content: '登录成功',
+        console.log(store.getState())
+            baseService.get('/user/login', {params: values}).then(res => {
+                console.log(res)
+                if(res.status!==200) return false
+                window.sessionStorage.setItem('userId',res.data.data)
+                messageApi.open({
+                    type: 'success',
+                    content: '登录成功',
+                })
+                setOpen(false)
+                store.dispatch({type:'updateIsLogin',data: store.getState()})
+                props.getIsLogin(store.getState())
+                console.log(store.getState())
             })
-            setOpen(false)
-        })
+
+
     }
     const [registerSubmit,setRegisterSubmit] = useState({})
     const onRegisterFinish = (values: any) => {
-        console.log(values);
         setRegisterSubmit(values)
+        register(values)
     };
     const [registerForm] = Form.useForm()
-    const register = ()=>{
+    const register = (values:any)=>{
         console.log(registerSubmit)
-        baseService.post({url:'/user/register',registerSubmit}).then(res => {
+        const registerFormJSON=JSON.stringify(registerSubmit)
+        console.log(registerFormJSON)
+        baseService.post('/user/register', registerSubmit).then(res => {
             console.log(res)
             if(res.status!==200) return false
             messageApi.open({
@@ -65,8 +91,8 @@ const Login = forwardRef((props:any,ref)=>{
             {contextHolder}
             <Modal className="modal-box1" width="60vw" title="" open={open} onOk={hideModal} onCancel={hideModal} footer={null} centered>
                 <div className="login-box" style={{width: "50vw",display: "flex",justifyContent: "center",alignItems: "center",flexDirection: "column"}}>
-                    <div className="top">{isLogin?'登录':'注册'}</div>
-                    <Form name="normal_login" form={loginForm} hidden={!isLogin} className="login-form" initialValues={{ remember: false }} onFinish={onLoginFinish}>
+                    <div className="top">{isLoginBtn?'登录':'注册'}</div>
+                    <Form name="normal_login" form={loginForm} hidden={!isLoginBtn} className="login-form" initialValues={{ remember: false }} onFinish={onLoginFinish}>
                         <Form.Item name="username"
                                    rules={[{ required: true, message: '请输入你的用户名!' }]}
                         >
@@ -81,23 +107,23 @@ const Login = forwardRef((props:any,ref)=>{
                                 placeholder="密码"
                             />
                         </Form.Item>
+                        {/*<Form.Item>*/}
+                            {/*<Form.Item name="remember" valuePropName="checked" noStyle>*/}
+                            {/*    <Checkbox>记住密码</Checkbox>*/}
+                            {/*</Form.Item>*/}
+                            {/*<a className="login-form-forgot" href="">*/}
+                            {/*    忘记密码*/}
+                            {/*</a>*/}
+                        {/*</Form.Item>*/}
                         <Form.Item>
-                            <Form.Item name="remember" valuePropName="checked" noStyle>
-                                <Checkbox>记住密码</Checkbox>
-                            </Form.Item>
-                            <a className="login-form-forgot" href="">
-                                忘记密码
-                            </a>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit" className="login-form-button" onClick={login}>
-                                {isLogin?'登录':'注册'}
+                            <Button type="primary" htmlType="submit" className="login-form-button">
+                                {isLoginBtn?'登录':'注册'}
                             </Button>
-                            Or <a onClick={switchBox}>{isLogin?'立即注册':'去登录'}!</a>
+                            Or <a onClick={switchBox}>{isLoginBtn?'立即注册':'去登录'}!</a>
                         </Form.Item>
                     </Form>
                     {/*注册表单*/}
-                    <Form name="normal_register" form={registerForm} hidden={isLogin} className="register-form" onFinish={onRegisterFinish}>
+                    <Form name="normal_register" form={registerForm} hidden={isLoginBtn} className="register-form" onFinish={onRegisterFinish}>
                         <Form.Item name="username" label="用户名"
                                    rules={[{ required: true, message: '请输入你的用户名!' }]}
                         >
@@ -134,12 +160,68 @@ const Login = forwardRef((props:any,ref)=>{
                         >
                             <Input.Password />
                         </Form.Item>
-
+                        <Form.Item name="grade" label="年级"
+                                   rules={[
+                                       {required: true, message: '请填写你的年级!',},
+                                   ]}
+                        >
+                            <Select
+                                style={{ width: '17.3vw' }}
+                                options={[
+                                    { value: '2021级', label: '2021级' },
+                                    { value: '2022级', label: '2022级' },
+                                    { value: '2023级', label: '2023级' },
+                                ]}
+                            />
+                        </Form.Item>
+                        <Form.Item name="college" label="学院"
+                                                   rules={[
+                                                       {required: true, message: '请填写你的学院!',},
+                                                   ]}
+                        >
+                            <Select
+                                style={{ width: '17.3vw' }}
+                                onChange={handleCollegeChange}
+                                options={collegeData.map((college) => ({ label: college, value: college }))}
+                            />
+                        </Form.Item>
+                        <Form.Item name="profession" label="专业"
+                                   rules={[
+                                       {required: true, message: '请填写你的专业!',},
+                                   ]}
+                        >
+                            <Select
+                                style={{ width: '17.3vw' }}
+                                onChange={onProfessChange}
+                                options={college.map((profess) => ({ label: profess, value: profess }))}
+                            />
+                        </Form.Item>
+                        <Form.Item name="classes" label="班级"
+                                   rules={[
+                                       {required: true, message: '请填写你的班级!',},
+                                   ]}
+                        >
+                            <Input />
+                        </Form.Item>
+                        <Form.Item name="realName" label="姓名"
+                                   rules={[
+                                       {required: true, message: '请填写你的姓名!',},
+                                   ]}
+                        >
+                            <Input />
+                        </Form.Item>
+                        <Form.Item name="phone" label="电话"
+                                   rules={[
+                                       {required: true, message: '请填写你的手机号!',},
+                                   ]}
+                        >
+                            <Input />
+                        </Form.Item>
                         <Form.Item>
-                            <Button type="primary" htmlType="submit" className="register-form-button" onClick={register}>
-                                {isLogin?'登录':'注册'}
+                            <Button type="primary" htmlType="submit" className="register-form-button">
+                                {isLoginBtn?'登录':'注册'}
                             </Button>
-                            Or <a onClick={switchBox}>{isLogin?'立即注册':'去登录'}!</a>
+                            Or <a onClick={switchBox}>{isLoginBtn?'立即注册':'去登录'}!</a>
                         </Form.Item>
                     </Form>
                 </div>

@@ -1,49 +1,48 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import './web.less'
+import baseService from '../../../axios/config'
 import {  Timeline } from 'antd';
 
 const {withRouter} = require('react-router-dom')
 function Web(){
-    const items = [
+    const [web,setWeb] = useState([
         {
-            label: '大一第一学期',
+            stage: "6",
+            description: "大数据",
+            photo: "6"
+        }
+    ])
+    const items = web.map(item=>{
+        return {
+            label:item.stage,
             color:'#f8a673',
-            children: '前端基础:\nHTML+CSS3+JavaScript',
-        },
-        {
-            label: '大一第二学期+暑假',
-            color:'#73f889',
-            children: '服务器端:\nAjax Node',
-        },
-        {
-            label: '大二第一学期+寒假',
-            color:'#739df8',
-            children: '前端框架:\nVUE REACT APP FLUTTER',
-        },
-        {
-            label: '大二第二学期+暑假',
-            color:'#bc73f8',
-            children: '项目实践',
-        },
-    ]
+            children:item.description
+        }
+    })
+    const getWeb = ()=>{
+        baseService.get('/direction/byName',{params:{directionName:"前端"}}).then(res=>{
+            console.log(res)
+            if(res.status!==200) return false
+            setWeb(res.data.data)
+            }
+        )
+    }
+    useEffect(()=>{
+        getWeb()
+    },[])
     return(
         <div className='web-box'>
             <Timeline mode='alternate' className='timelines'
                 items={items}
             />
             <div className="img-box">
-                <div className="first">
-                    <img src={require('../../../assets/study/web.png')} />
-                </div>
-                <div className="first">
-                    <img src={require('../../../assets/study/web2.png')} />
-                </div>
-                <div className="first">
-                    <img src={require('../../../assets/study/web3.png')} />
-                </div>
-                <div className="first">
-                    <img src={require('../../../assets/study/web4.png')} />
-                </div>
+                {web.map((items,index)=>{
+                    return(
+                        <div key={index} className="first">
+                            <img src={items.photo} />
+                        </div>
+                    )
+                })}
             </div>
         </div>
     )

@@ -3,7 +3,6 @@ import './teacher.less'
 
 function Teacher(props:any){
     const teacher = props
-    console.log(teacher)
     const isShow = teacher.props.study===''?false:true;
     if(isShow) {
         return(

@@ -4,10 +4,10 @@ import axios from 'axios'
 //创建axios实例
 const Service = axios.create({
     // 设置baseURL地址
-    baseURL: 'http://127.0.0.1:4523/m1/3206006-0-default',
-    // headers:{
-    //     "Content-Type":"application/json; charset=UTF-8"
-    // },
+    baseURL: 'http://123.249.27.251:8080',
+    headers:{
+        "Content-Type":"application/json; charset=UTF-8"
+    },
     time: 5000
 })
 
