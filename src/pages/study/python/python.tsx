@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import baseService from "../../../axios/config";
+import './python.less'
 import {Timeline} from "antd";
 
 const {withRouter} = require('react-router-dom')
@@ -19,7 +20,7 @@ function Python(){
         }
     })
     const getPython = ()=>{
-        baseService.get('/direction/byName',{params:{directionName:"前端"}}).then(res=>{
+        baseService.get('/direction/byName',{params:{directionName:"python"}}).then(res=>{
                 console.log(res)
                 if(res.status!==200) return false
                 setPython(res.data.data)

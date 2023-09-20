@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Tabs,Upload,message } from 'antd';
+import {Button, Tabs,Upload,message,Modal } from 'antd';
 import type { UploadProps } from 'antd';
 import baseService from '../../axios/config'
 import './enrollment.less'
@@ -9,6 +9,7 @@ const {withRouter} = require('react-router-dom')
 
 function Enrollment(props:any){
     const { TabPane } = Tabs;
+    const { confirm } = Modal;
     const [items,setItems] = useState([
         {
             name: `招新对象`,
@@ -70,48 +71,107 @@ function Enrollment(props:any){
             setProcess(res.data.data)
         })
     }
-    const [userId,setUserId] = useState(null)
     const [isLogin,setIsLogin] = useState(store.getState);
     useEffect(()=>{
         getItems()
         getTempFile()
         getProcess()
-
+        console.log(window.sessionStorage.getItem('userId'))
         setIsLogin(store.getState())
     },[props.getNavLogin,store.getState()])
+    const [fileList, setFileList] = useState([]);
 
-    const propsUpload: UploadProps = {
-        name: 'file',
-        accept:'application/pdf',
-        action: `http://192.168.137.165:8080/file/insertFiles/${userId}`,
-        maxCount:1,
-        headers: {
-            authorization: 'authorization-text',
-        },
-        beforeUpload: (file) => {
-            console.log(isLogin)
+    const customRequest = (options:any) => {
+        console.log(options)
+            baseService.put(`/file/insertFiles/byId`, {user_id:window.sessionStorage.getItem('userId'),file: options}).then(res=>{
+                console.log(res)
+                if (res.status!==200) return false
+                message.success(res.data.data)
+            })
+            // 在这里编写自己的上传逻辑，例如使用 axios 发送请求
+            // 可以使用 options.file 来获取上传的文件内容
+            // 可以使用 options.onSuccess 来处理上传成功后的回调
+            // 可以使用 options.onError 来处理上传失败后的回调
+        };
+
+    const beforeUpload = (options:any) => {
+            // 可以在这里处理上传之前的逻辑，例如校验文件类型等
             if(!isLogin) {
                 return Promise.reject('请先登录');
             }
-            const id = window.sessionStorage.getItem('userId');
-            setUserId(id==null?null:userId)
-            const ispdf = file.type === 'application/pdf';
-            if (!ispdf) {
-                message.error(`${file.name} 不是一个 pdf 类型的文件`);
-            }
-            return Promise.resolve();
-        },
-        onChange(info) {
-            if (info.file.status !== 'uploading') {
-                console.log(info.file, info.fileList);
-            }
-            if (info.file.status === 'done') {
-                message.success(`${info.file.name} 上传成功`);
-            } else if (info.file.status === 'error') {
-                message.error(`${info.file.name} 上传失败`);
-            }
-        },
+            baseService.get(`/file/isDeliver/${window.sessionStorage.getItem('userId')}`,).then(res=>{
+                console.log(res)
+                if(res.status!==200) return false
+                if(res.data.data==1) {
+                    confirm({
+                        content: '您已经上传过简历，再次上传将会覆盖之前的文件，确定继续上传吗？',
+                        okText: '确定',
+                        okType: 'danger',
+                        cancelText:'取消',
+                        onOk() {
+                            const ispdf = options.type === 'application/pdf';
+                            if (!ispdf) {
+                                message.error(`${options.name} 不是一个 pdf 类型的文件`);
+                            }
+                            customRequest(options);
+                        },
+                        onCancel() {
+                            message.info(`已取消`);
+                        },
+                    });
+                } else {
+                    const ispdf = options.type === 'application/pdf';
+                    if (!ispdf) {
+                        message.error(`${options.name} 不是一个 pdf 类型的文件`);
+                    }
+                    customRequest(options);
+                }
+            })
+
+        };
+
+    const handleChange = (info:any) => {
+        setFileList(info.fileList);
+        // if (info.file.status !== 'uploading') {
+        //     console.log(info.file, info.fileList);
+        // }
+        // if (info.file.status === 'done') {
+        //     message.success(`${info.file.name} 上传成功`);
+        // } else if (info.file.status === 'error') {
+        //     return false
+        // }
     };
+    // const propsUpload: UploadProps = {
+    //     name: '简历',
+    {/*    accept:'application/pdf',*/}
+    //     action: `http://123.249.27.251:8080/file/insertFiles/${window.sessionStorage.getItem('userId')}`,
+    {/*    maxCount:1,*/}
+    //     headers: {
+    //         authorization: 'authorization-text',
+    //     },
+    //     beforeUpload: (file) => {
+    //         console.log(isLogin)
+    //         if(!isLogin) {
+    {/*            return Promise.reject('请先登录');*/}
+    {/*        }*/}
+    {/*        const ispdf = file.type === 'application/pdf';*/}
+    {/*        if (!ispdf) {*/}
+    {/*            message.error(`${file.name} 不是一个 pdf 类型的文件`);*/}
+    {/*        }*/}
+    //         return Promise.resolve();
+    //     },
+    {/*    onChange(info) {*/}
+    //         console.log(info)
+    //         if (info.file.status !== 'uploading') {
+    //             console.log(info.file, info.fileList);
+    //         }
+    //         if (info.file.status === 'done') {
+    //             message.success(`${info.file.name} 上传成功`);
+    //         } else if (info.file.status === 'error') {
+    //             message.error(`${info.file.name} 上传失败`);
+    //         }
+    //     },
+    // };
     return(
         <div className='enrollment-box'>
             <Tabs defaultActiveKey="1" type="card" size='large'>
@@ -149,7 +209,7 @@ function Enrollment(props:any){
                     <div className="img">
                         <img src={process.photo} alt=""/>
                     </div>
-                    <Upload {...propsUpload}>
+                    <Upload name="file" showUploadList={false} headers={{authorization: 'authorization-text'}} accept='application/pdf' fileList={fileList} beforeUpload={beforeUpload} onChange={handleChange}  >
                         <Button type='primary'  style={{display:isLogin?'block':'none'}}>点击上传简历</Button>
                     </Upload>
                 </div>

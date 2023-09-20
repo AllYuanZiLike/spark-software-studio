@@ -217,6 +217,9 @@ const Login = forwardRef((props:any,ref)=>{
                         >
                             <Input />
                         </Form.Item>
+                        <Form.Item name="blog" label="博客地址">
+                            <Input placeholder="CSDN个人主页地址（非必填）"/>
+                        </Form.Item>
                         <Form.Item>
                             <Button type="primary" htmlType="submit" className="register-form-button">
                                 {isLoginBtn?'登录':'注册'}

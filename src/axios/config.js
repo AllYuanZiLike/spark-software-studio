@@ -6,7 +6,7 @@ const Service = axios.create({
     // 设置baseURL地址
     baseURL: 'http://123.249.27.251:8080',
     headers:{
-        "Content-Type":"application/json; charset=UTF-8"
+        "Content-Type":"application/json; charset=UTF-8; multipart/form-data;"
     },
     time: 5000
 })

@@ -11,9 +11,7 @@ import Manage from "./pages/manage/index";
 import {ConfigProvider} from 'antd'
 import baseService from './axios/config'
 import store from "./redux/store";
-import { createBrowserHistory } from 'history';
-const {Route,BrowserRouter,Redirect} =require( "react-router-dom");
-const history = createBrowserHistory()
+const {Route,HashRouter,Redirect} =require( "react-router-dom");
 function App() {
     const [bgApp,setBgApp] = useState(require('./assets/home_bg.png'))
     const getBgApp = useCallback(()=>{
@@ -35,7 +33,7 @@ function App() {
                   // 派生变量，影响范围小
                   colorBgContainer: '#e9f3e0',},
           }}>
-          <BrowserRouter history={history}>
+          <HashRouter>
               <NavBar sendIsLogin={isLoginValue}></NavBar>
                   <Redirect from='/' to='/intro' exact></Redirect>
                   <Route component={Intro} path="/intro"></Route>
@@ -45,7 +43,7 @@ function App() {
                   <Route component={Enrollment} path="/enrollment" getNavLogin={isLoginValue}></Route>
                   <Route component={Manage} path="/manage"></Route>
               <Footer></Footer>
-          </BrowserRouter>
+          </HashRouter>
           </ConfigProvider>
       </div>
   );

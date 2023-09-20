@@ -11,7 +11,8 @@ function Footer(){
         address:'河南科技学院星火软件实验室',
         phone:'18125848247',
         name:'',
-        icp:''
+        icp:'',
+        copyrighted:''
     })
     const getImgs = ()=>{
         baseService.get('/bottom/query').then(res=>{
@@ -44,10 +45,10 @@ function Footer(){
                 </div>
             </div>
             <div className="right">
-                工信部备案：豫ICP备{imgs.icp}号-1<br/>
-                豫公网安备：{imgs.icp}号<br/>
-                {imgs.name} © 2023 {imgs.address}<br/>
-
+                {/*工信部备案：豫ICP备{imgs.icp}号-1<br/>*/}
+                {/*豫公网安备：{imgs.icp}号<br />*/}
+                © 2023 {imgs.address}<br/>
+                版权所有：{imgs.copyrighted}<br/>
                 联系方式：{imgs.phone}
             </div>
         </div>
