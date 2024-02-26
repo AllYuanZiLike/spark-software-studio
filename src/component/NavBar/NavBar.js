@@ -1,5 +1,5 @@
 import "./NavBar.less"
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import baseService from '../../axios/config'
 import {
     Avatar,

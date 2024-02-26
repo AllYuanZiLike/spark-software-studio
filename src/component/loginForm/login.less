@@ -14,26 +14,35 @@
 .modal-box {
 
   .ant-modal {
-     .ant-modal-body {
+     .ant-modal-content {
+       width: 100%;
        display: flex;
+       flex-direction: column;
        justify-content: center;
-       .login-box {
-         margin-top: 4vh;
+       align-items: center;
+       .ant-modal-body {
+         width: 100%;
          display: flex;
-         flex-direction: column;
          justify-content: center;
-         align-items: center;
-         .top {
-           width: 40%;
-           height: 6vh;
-           line-height: 6vh;
-           color: #fff;
-           font-size: 1.2em;
-           margin-bottom: 2vh;
-           background-color: #7fb493;
-           text-align: center;
-         }
+         .login-box {
+           margin-top: 4vh;
+           display: flex;
+           flex-direction: column;
+           justify-content: center;
+           align-items: center;
+           width: 25vw;
+           .top {
+             width: 40%;
+             height: 6vh;
+             line-height: 6vh;
+             color: #fff;
+             font-size: 1.2em;
+             margin-bottom: 2vh;
+             background-color: #7fb493;
+             text-align: center;
+           }
 
+         }
        }
      }
   }

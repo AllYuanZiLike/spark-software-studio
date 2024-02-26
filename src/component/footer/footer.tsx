@@ -27,29 +27,30 @@ function Footer(){
     return(
         <div className='footer-main'>
             <div className="left">
-                <div className="top">
-                    <div className="top-left">
-                        <img src={imgs.schoolBadgeImg} alt=""/>
-                    </div>
-                    <div className="top-right">
-                        <img src={imgs.schoolNameImg} alt=""/>
-                    </div>
-                </div>
-                <div className="bottom">
-                    <div className="bottom-left">
+                {/*<div className="top">*/}
+                {/*    <div className="top-left">*/}
+                {/*        <img src={imgs.schoolBadgeImg} alt=""/>*/}
+                {/*    </div>*/}
+                {/*    <div className="top-right">*/}
+                {/*        <img src={imgs.schoolNameImg} alt=""/>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
+                {/*<div className="bottom">*/}
+                {/*    <div className="bottom-left">*/}
                         <img src={imgs.logo} alt=""/>
-                    </div>
-                    <div className="bottom-right">
-                        <img src={imgs.groupNameImg} alt=""/>
-                    </div>
-                </div>
+                    {/*</div>*/}
+
+                {/*</div>*/}
             </div>
-            <div className="right">
+            <div className="center">
                 {/*工信部备案：豫ICP备{imgs.icp}号-1<br/>*/}
                 {/*豫公网安备：{imgs.icp}号<br />*/}
                 © 2023 {imgs.address}<br/>
                 版权所有：{imgs.copyrighted}<br/>
                 联系方式：{imgs.phone}
+            </div>
+            <div className="right">
+                <img src={imgs.groupNameImg} alt=""/>
             </div>
         </div>
     )

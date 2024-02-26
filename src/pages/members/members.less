@@ -8,15 +8,12 @@
       flex-wrap: wrap;
       justify-content: space-around;
       align-items: center;
-      //position: absolute;
-      //left: 50%;
-      //top: 50%;
-      //transform: translate(-50%, -50%);
       .card:nth-child(3n) {
         margin-right: 0;
       }
       .card {
         width: 19%;
+        height: 45vh;
         position: relative;
         margin:2vw 3vw;
         .show-wrapper {
@@ -36,7 +33,7 @@
               }
             }
             .title {
-                margin: 1vh 0;
+                margin: .5vh 0;
             }
             .intro {
               display: flex;
@@ -92,7 +89,7 @@
       }
       .card:hover {
         .show-wrapper {
-          transform: translateY(-25%);
+          transform: translateY(-15%);
 
           .pic-wrapper {
             transform: scale(0.8);
@@ -124,7 +121,7 @@
   100% {
     opacity: 1;
     text-align: center;
-    transform: translateY(-55%);
+    transform: translateY(-30%);
   }
 }
 @keyframes hoverWrapperAmt {
